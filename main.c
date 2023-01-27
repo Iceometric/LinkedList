@@ -9,18 +9,18 @@
 struct Node {
 
     struct Node *next;
-    bool active; 
     int32_t value;
+    bool active; 
 
 };
 
-typedef struct ListHead {
+typedef struct List {
 
     struct Node *start;
     struct Node *buf;
     uint32_t size;
 
-} ListHead;
+} List;
 
 struct Node *initNodeBuffer() {
 
@@ -28,22 +28,22 @@ struct Node *initNodeBuffer() {
 
 }
 
-ListHead *initList() {
+List *initList() {
 
-    ListHead *lh = malloc(sizeof(ListHead));
-    lh->buf = initNodeBuffer();
-    lh->start = lh->buf;
-    lh->size = 0;
+    List *list = malloc(sizeof(List));
+    list->buf = initNodeBuffer();
+    list->start = list->buf;
+    list->size = 0;
 
-    return lh;
+    return list;
 }
 
-struct Node *firstEmpty(ListHead *lh) {
-    if (lh->size <= 0) { return lh->buf; }
+struct Node *firstEmpty(List *list) {
+    if (list->size <= 0) { return list->buf; }
 
     struct Node *current;
     for (int i = 0; i < BUF_SIZE; i++) {
-        current = &lh->buf[i];
+        current = &list->buf[i];
         if (!current->active)
             break;
     }
@@ -51,50 +51,50 @@ struct Node *firstEmpty(ListHead *lh) {
     return current;
 }
 
-void add(ListHead *lh, int32_t value) {
-    struct Node *current = lh->start;
+void top(List *list, int32_t value) {
+    struct Node *current = list->start;
     while (current->next) { current = current->next; }
 
-    lh->size++;
+    list->size++;
     current->value = value;
     current->active = true;
-    current->next = firstEmpty(lh);
+    current->next = firstEmpty(list);
 }
 
-void push(ListHead *lh, int32_t value) {
-    struct Node *current = firstEmpty(lh);
+void push(List *list, int32_t value) {
+    struct Node *current = firstEmpty(list);
 
-    lh->size++;
+    list->size++;
     current->value = value;
     current->active = true;
-    current->next = lh->start;
+    current->next = list->start;
 
-    lh->start = current;
+    list->start = current;
 }
 
-void pop(ListHead *lh, uint32_t index) {
-    if (index <= 0 || index > lh->size) { return; }
+void pop(List *list, uint32_t index) {
+    if (index <= 0 || index > list->size) { return; }
     struct Node *current, *previous;
 
-    current = lh->start;
+    current = list->start;
     int i = 0;
     while (i++ < index) { 
         previous = current;
         current = current->next; 
     }
 
-    lh->size--;
+    list->size--;
     previous->next = current->next;
     current->active = false;
     current->next = NULL;
 }
 
-void insert(ListHead *lh, uint32_t index, int32_t value) {
-    if (index <= 0) { push(lh, value); return; }
-    if (index > lh->size) { add(lh, value); return; }
+void insert(List *list, uint32_t index, int32_t value) {
+    if (index <= 0) { push(list, value); return; }
+    if (index > list->size) { top(list, value); return; }
 
     struct Node *previous, *current, *inserted;
-    current = lh->start;
+    current = list->start;
     
     int i = 0;
     while (i++ < index) { 
@@ -102,23 +102,21 @@ void insert(ListHead *lh, uint32_t index, int32_t value) {
         current = current->next; 
     }
 
-    printf("\n");
-
-    inserted = firstEmpty(lh);
+    inserted = firstEmpty(list);
     inserted->value = value;
     inserted->active = true;
     inserted->next = current;
 
     if (previous) { previous->next = inserted; }
 
-    lh->size++;
+    list->size++;
 }
 
-void printValues(ListHead *lh) {
-    if (lh->size <= 0) { return; }
+void printValues(List *list) {
+    if (list->size <= 0) { return; }
 
-    struct Node *current = lh->start;
-    for (int i = 0; i < lh->size; i++) {
+    struct Node *current = list->start;
+    for (int i = 0; i < list->size; i++) {
         printf("(%p) %d: %d\n", current, i, current->value);
         current = current->next;
     }
@@ -129,10 +127,10 @@ void printValues(ListHead *lh) {
 
 int main() {
 
-    ListHead *list = initList();
+    List *list = initList();
 
     for (int i = 0; i < 10; i++) {
-        add(list, i * 3);
+        top(list, i * 3);
     }
 
     printValues(list);
@@ -141,15 +139,15 @@ int main() {
 
     printValues(list);
 
-    add(list, 123);
+    top(list, 123);
 
     printValues(list);
 
-    add(list, 123);
+    top(list, 123);
 
     printValues(list);
 
-    add(list, 123);
+    top(list, 123);
 
     printValues(list);
 
