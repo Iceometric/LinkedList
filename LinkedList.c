@@ -1,79 +1,129 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 
 #define SUCCESS 0
-#define BUF_SIZE 1000
+
+void reached(int x) { printf("Reached: %d\n", x); }
+
 
 struct Node {
 
     struct Node *next;
-    int32_t value;
+    struct Node *previous;
+    void *element;
     bool active; 
 
 };
 
 typedef struct List {
 
+    struct Node *nodes;
     struct Node *start;
-    struct Node *buf;
-    uint32_t size;
+    void *elements;
+    size_t size;
+    uint32_t capacity;
+    uint32_t len;
 
 } List;
 
-struct Node *initNodeBuffer() {
+struct Node *initNodeBuffer(uint32_t capacity) {
 
-    return (struct Node*)calloc(BUF_SIZE, sizeof(struct Node));
+    return (struct Node*)calloc(capacity, sizeof(struct Node));
 
 }
 
-List *initList() {
+List *initList(size_t elementSize, uint32_t capacity) {
 
     List *list = malloc(sizeof(List));
-    list->buf = initNodeBuffer();
-    list->start = list->buf;
-    list->size = 0;
+    list->nodes = initNodeBuffer(capacity);
+    list->start = list->nodes;
+    list->elements = calloc(capacity, elementSize * capacity);
+    list->size = elementSize;
+    list->capacity = capacity;
+    list->len = 0;
 
     return list;
 }
 
+int releaseList(List *list) {
+    
+    free(list->nodes);
+    free(list->elements);
+    free(list);
+
+    return SUCCESS;
+
+}
+
 struct Node *firstEmpty(List *list) {
-    if (list->size <= 0) { return list->buf; }
+
+    if (list->len <= 0) { 
+        list->nodes->element = list->elements;
+        return list->nodes; 
+    }
 
     struct Node *current;
-    for (int i = 0; i < BUF_SIZE; i++) {
-        current = &list->buf[i];
-        if (!current->active)
+    for (int i = 0; i < list->capacity; i++) {
+        current = &list->nodes[i];
+        if (!current->active) {
+            current->element = list->elements + (i * list->size);
             break;
+        }
     }
 
     return current;
+
 }
 
-void top(List *list, int32_t value) {
-    struct Node *current = list->start;
-    while (current->next) { current = current->next; }
+void setElement(List *list, struct Node *node, void *src) {
 
-    list->size++;
-    current->value = value;
-    current->active = true;
-    current->next = firstEmpty(list);
+    char *p = src;
+    for (size_t i = 0; i < list->size; i++) {
+        memcpy(node->element +  (i * list->size), p, list->size);
+    }
+
 }
 
-void push(List *list, int32_t value) {
+void push(List *list, void *element) {
+
     struct Node *current = firstEmpty(list);
 
-    list->size++;
-    current->value = value;
+    setElement(list, current, element);
     current->active = true;
-    current->next = list->start;
 
+    if (list->len == 0) {
+        current->next = NULL;
+    } else {
+        current->next = list->start;
+    }
     list->start = current;
+    list->len++;
+
+}
+
+
+void top(List *list, void *element) {
+
+    struct Node *inserted = firstEmpty(list);
+    setElement(list, inserted, element);
+    inserted->active = true;
+    inserted->next = NULL;
+
+    struct Node *current = list->start;
+    while (current->next) { current = current->next; }
+    
+    current->next = inserted;
+
+    list->len++;
+
 }
 
 void pop(List *list, uint32_t index) {
-    if (index <= 0 || index > list->size) { return; }
+
+    if (index <= 0 || index > list->len) { return; }
     struct Node *current, *previous;
 
     current = list->start;
@@ -83,15 +133,17 @@ void pop(List *list, uint32_t index) {
         current = current->next; 
     }
 
-    list->size--;
+    list->len--;
     previous->next = current->next;
     current->active = false;
     current->next = NULL;
+
 }
 
-void insert(List *list, uint32_t index, int32_t value) {
-    if (index <= 0) { push(list, value); return; }
-    if (index > list->size) { top(list, value); return; }
+void insert(List *list, uint32_t index, void *element) {
+
+    if (index <= 0) { push(list, element); return; }
+    if (index > list->len) { top(list, element); return; }
 
     struct Node *previous, *current, *inserted;
     current = list->start;
@@ -103,22 +155,12 @@ void insert(List *list, uint32_t index, int32_t value) {
     }
 
     inserted = firstEmpty(list);
-    inserted->value = value;
+    setElement(list, inserted, element);
     inserted->active = true;
     inserted->next = current;
 
     if (previous) { previous->next = inserted; }
 
-    list->size++;
-}
+    list->len++;
 
-void printValues(List *list) {
-    if (list->size <= 0) { return; }
-
-    struct Node *current = list->start;
-    for (int i = 0; i < list->size; i++) {
-        printf("(%p) %d: %d\n", current, i, current->value);
-        current = current->next;
-    }
-    printf("\n");
 }
