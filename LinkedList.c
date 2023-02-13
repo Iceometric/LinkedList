@@ -1,33 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stdbool.h>
-
-#define SUCCESS 0
-
-void reached(int x) { printf("Reached: %d\n", x); }
-
-
-struct Node {
-
-    struct Node *next;
-    struct Node *previous;
-    void *element;
-    bool active; 
-
-};
-
-typedef struct List {
-
-    struct Node *nodes;
-    struct Node *start;
-    void *elements;
-    size_t size;
-    uint32_t capacity;
-    uint32_t len;
-
-} List;
+#include "LinkedList.h"
 
 struct Node *initNodeBuffer(uint32_t capacity) {
 
@@ -46,6 +17,7 @@ List *initList(size_t elementSize, uint32_t capacity) {
     list->len = 0;
 
     return list;
+    
 }
 
 int releaseList(List *list) {
@@ -93,12 +65,14 @@ void push(List *list, void *element) {
 
     setElement(list, current, element);
     current->active = true;
+    current->previous = NULL;
 
     if (list->len == 0) {
         current->next = NULL;
     } else {
         current->next = list->start;
     }
+
     list->start = current;
     list->len++;
 
@@ -107,14 +81,15 @@ void push(List *list, void *element) {
 
 void top(List *list, void *element) {
 
+    struct Node *current = list->start;
+    while (current->next) { current = current->next; }
+    
     struct Node *inserted = firstEmpty(list);
     setElement(list, inserted, element);
     inserted->active = true;
     inserted->next = NULL;
+    inserted->previous = current;
 
-    struct Node *current = list->start;
-    while (current->next) { current = current->next; }
-    
     current->next = inserted;
 
     list->len++;
@@ -124,9 +99,10 @@ void top(List *list, void *element) {
 void pop(List *list, uint32_t index) {
 
     if (index <= 0 || index > list->len) { return; }
-    struct Node *current, *previous;
 
+    struct Node *current, *previous;
     current = list->start;
+
     int i = 0;
     while (i++ < index) { 
         previous = current;
@@ -159,8 +135,28 @@ void insert(List *list, uint32_t index, void *element) {
     inserted->active = true;
     inserted->next = current;
 
-    if (previous) { previous->next = inserted; }
+    if (previous) {
+        previous->next = inserted; 
+        inserted->previous = previous;
+    }
 
     list->len++;
+
+}
+
+void reverse(List *list) {
+
+    struct Node *previous, *current, *next;
+
+    current = list->start;
+
+    while (current != NULL) {
+        next = current->next;
+        current->next = previous;
+        previous = current;
+        current = next;
+    }
+
+    list->start = previous;
 
 }

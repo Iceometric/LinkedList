@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "LinkedList.c"
 
 struct MyStruct {
@@ -11,10 +12,13 @@ struct MyStruct {
 };
 
 void printMyStruct(struct MyStruct *m) {
+
     printf("a: %d, b: %d, c: %d, d: %d, e: %d\n", m->a, m->b, m->c, m->d, m->e);
+
 }
 
 void printValuesi(List *list) {
+
     if (list->len <= 0) { return; }
 
     struct Node *current = list->start;
@@ -23,9 +27,11 @@ void printValuesi(List *list) {
         current = current->next;
     }
     printf("\n");
+
 }
 
 void printMyStructArray(List *list) {
+
     if (list->len <= 0) { return; }
 
     struct Node *current = list->start;
@@ -35,6 +41,7 @@ void printMyStructArray(List *list) {
         current = current->next;
     }
     printf("\n");
+
 }
 
 int main() {
@@ -54,46 +61,9 @@ int main() {
     printMyStructArray(list);
     pop(list, 3);
     printMyStructArray(list);
+    reverse(list);
+    printMyStructArray(list);
 
-
-//    for (int i = 0; i < 10; i++) {
-//        top(list, i * 3);
-//    }
-//
-//    printValues(list);
-//
-//    pop(list, 5);
-//
-//    printValues(list);
-//
-//    top(list, 123);
-//
-//    printValues(list);
-//
-//    top(list, 123);
-//
-//    printValues(list);
-//
-//    top(list, 123);
-//
-//    printValues(list);
-//
-//    pop(list, 5);
-//
-//    printValues(list);
-//
-//    insert(list, 5, 43);
-//
-//    printValues(list);
-//
-//    insert(list, 1, 44);
-//
-//    printValues(list);
-//
-//    insert(list, 0, 45);
-//
-//    printValues(list);
-//
     return SUCCESS;
 }
 
