@@ -54,8 +54,19 @@ void setElement(List *list, struct Node *node, void *src) {
 
     char *p = src;
     for (size_t i = 0; i < list->size; i++) {
-        memcpy(node->element +  (i * list->size), p, list->size);
+        memcpy(node->element, p, list->size);
     }
+
+}
+
+void resetNode(List *list, struct Node *node) {
+
+    memset(node->element, '\0', list->size);
+    
+    node->active = false;
+    node->element = NULL;
+    node->next = NULL;
+    node->previous = NULL;
 
 }
 
@@ -81,6 +92,8 @@ void push(List *list, void *element) {
 
 void top(List *list, void *element) {
 
+    if (index <= 0) { push(list, element); return; }
+
     struct Node *current = list->start;
     while (current->next) { current = current->next; }
     
@@ -98,47 +111,47 @@ void top(List *list, void *element) {
 
 void pop(List *list, uint32_t index) {
 
-    if (index <= 0 || index > list->len) { return; }
+    if (index < 0 || index > list->len - 1) { return; }
 
-    struct Node *current, *previous;
+    struct Node *current, *previous, *next;
     current = list->start;
 
     int i = 0;
-    while (i++ < index) { 
-        previous = current;
-        current = current->next; 
-    }
+    while (i++ < index) { current = current->next; }
+
+    previous = current->previous;
+    next = current->next;
+
+    if (previous) { previous->next = next; }
+    if (next) { next->previous = previous; }
+
+    resetNode(list, current);
 
     list->len--;
-    previous->next = current->next;
-    current->active = false;
-    current->next = NULL;
 
 }
 
 void insert(List *list, uint32_t index, void *element) {
 
     if (index <= 0) { push(list, element); return; }
-    if (index > list->len) { top(list, element); return; }
+    if (index > list->len - 1) { top(list, element); return; }
 
     struct Node *previous, *current, *inserted;
     current = list->start;
     
     int i = 0;
-    while (i++ < index) { 
-        previous = current;
-        current = current->next; 
-    }
+    while (i++ < index) { current = current->next; }
+
+    previous = current->previous;
 
     inserted = firstEmpty(list);
     setElement(list, inserted, element);
     inserted->active = true;
+    inserted->previous = previous;
     inserted->next = current;
+    current->previous = inserted;
 
-    if (previous) {
-        previous->next = inserted; 
-        inserted->previous = previous;
-    }
+    previous->next = inserted; 
 
     list->len++;
 
@@ -150,7 +163,7 @@ void reverse(List *list) {
 
     current = list->start;
 
-    while (current != NULL) {
+    while (current) {
         next = current->next;
         current->next = previous;
         previous = current;

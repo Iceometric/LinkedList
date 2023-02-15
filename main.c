@@ -13,7 +13,7 @@ struct MyStruct {
 
 void printMyStruct(struct MyStruct *m) {
 
-    printf("a: %d, b: %d, c: %d, d: %d, e: %d\n", m->a, m->b, m->c, m->d, m->e);
+    printf("(%p) a: %d, b: %d, c: %d, d: %d, e: %d\n", m, m->a, m->b, m->c, m->d, m->e);
 
 }
 
@@ -49,22 +49,42 @@ int main() {
     List *list = initList(sizeof(struct MyStruct), 100);
 
     int asd = 123;
+    printf("push \n");
     push(list, &(struct MyStruct){1,2,3,4,5});
     printMyStructArray(list);
+
+    printf("top\n");
     top(list, &(struct MyStruct){2,3,4,5,6});
     printMyStructArray(list);
+
+    printf("insert 1\n");
     insert(list, 1, &(struct MyStruct){3,4,5,6,7});
     printMyStructArray(list);
+
+    printf("push \n");
     push(list, &(struct MyStruct){4,5,6,7,8});
     printMyStructArray(list);
-    insert(list, 2, &(struct MyStruct){5,4,5,6,7});
+
+    printf("insert 2\n");
+    insert(list, 2, &(struct MyStruct){5,6,7,8,9});
     printMyStructArray(list);
+
+    printf("pop 3\n");
     pop(list, 3);
     printMyStructArray(list);
+
+    printf("push \n");
+    push(list, &(struct MyStruct){6,7,8,9,10});
+    printMyStructArray(list);
+
+    printf("reverse\n");
     reverse(list);
+    printMyStructArray(list);
+
+    printf("push \n");
+    push(list, &(struct MyStruct){7,8,9,10,11});
     printMyStructArray(list);
 
     return SUCCESS;
 }
-
 
