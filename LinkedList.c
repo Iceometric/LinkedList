@@ -73,7 +73,6 @@ void resetNode(List *list, struct Node *node) {
 void push(List *list, void *element) {
 
     struct Node *current = firstEmpty(list);
-
     setElement(list, current, element);
     current->active = true;
     current->previous = NULL;
@@ -149,6 +148,7 @@ void insert(List *list, uint32_t index, void *element) {
     inserted->active = true;
     inserted->previous = previous;
     inserted->next = current;
+
     current->previous = inserted;
 
     previous->next = inserted; 

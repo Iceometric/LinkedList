@@ -48,7 +48,6 @@ int main() {
 
     List *list = initList(sizeof(struct MyStruct), 100);
 
-    int asd = 123;
     printf("push \n");
     push(list, &(struct MyStruct){1,2,3,4,5});
     printMyStructArray(list);
