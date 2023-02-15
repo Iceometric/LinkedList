@@ -77,3 +77,8 @@ void insert(List *list, uint32_t index, void *element);
  * Reverse the list.
 */
 void reverse(List *list);
+
+/**
+ * Runs passed function for each element in list.
+*/
+void forEach(List *list, void(*f)(void *));

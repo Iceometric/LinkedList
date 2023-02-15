@@ -173,3 +173,15 @@ void reverse(List *list) {
     list->start = previous;
 
 }
+
+void forEach(List *list, void(*f)(void *)) {
+
+    if (list->len <= 0) { return; }
+
+    struct Node *node = list->start;
+    for (int i = 0; i < list->len; i++) {
+        f(node->element);
+        node = node->next;
+    }
+
+}
