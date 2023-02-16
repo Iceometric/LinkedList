@@ -52,10 +52,7 @@ struct Node *firstEmpty(List *list) {
 
 void setElement(List *list, struct Node *node, void *src) {
 
-    char *p = src;
-    for (size_t i = 0; i < list->size; i++) {
-        memcpy(node->element, p, list->size);
-    }
+    memcpy(node->element, src, list->size);
 
 }
 
@@ -115,8 +112,7 @@ void pop(List *list, uint32_t index) {
     struct Node *current, *previous, *next;
     current = list->start;
 
-    int i = 0;
-    while (i++ < index) { current = current->next; }
+    for (int i = 0; i < index; i++) { current = current->next; }
 
     previous = current->previous;
     next = current->next;
@@ -138,8 +134,7 @@ void insert(List *list, uint32_t index, void *element) {
     struct Node *previous, *current, *inserted;
     current = list->start;
     
-    int i = 0;
-    while (i++ < index) { current = current->next; }
+    for (int i = 0; i < index; i++) { current = current->next; }
 
     previous = current->previous;
 

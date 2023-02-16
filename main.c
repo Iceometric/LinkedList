@@ -17,6 +17,12 @@ void printMyStruct(struct MyStruct *m) {
 
 }
 
+int sum(struct MyStruct *m) {
+
+    return m->a + m->b + m->c + m-> d + m-> e;
+
+}
+
 void doubleMyStruct(struct MyStruct *m) {
 
     m->a *= 2;
@@ -27,76 +33,49 @@ void doubleMyStruct(struct MyStruct *m) {
 
 }
 
-void printValuesi(List *list) {
-
-    if (list->len <= 0) { return; }
-
-    struct Node *current = list->start;
-    for (int i = 0; i < list->len; i++) {
-        printf("(%p) %d: %d\n", current, i, *(int *)current->element);
-        current = current->next;
-    }
-    printf("\n");
-
-}
-
-void printMyStructArray(List *list) {
-
-    if (list->len <= 0) { return; }
-
-    struct Node *current = list->start;
-    for (int i = 0; i < list->len; i++) {
-        printf("%d: ",i);
-        printMyStruct((struct MyStruct*)current->element);
-        current = current->next;
-    }
-    printf("\n");
-
-}
-
 int main() {
 
     List *list = initList(sizeof(struct MyStruct), 100);
 
     printf("push \n");
     push(list, &(struct MyStruct){1,2,3,4,5});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("top\n");
     top(list, &(struct MyStruct){2,3,4,5,6});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("insert 1\n");
     insert(list, 1, &(struct MyStruct){3,4,5,6,7});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("push \n");
     push(list, &(struct MyStruct){4,5,6,7,8});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("insert 2\n");
     insert(list, 2, &(struct MyStruct){5,6,7,8,9});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("pop 3\n");
     pop(list, 3);
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("push \n");
     push(list, &(struct MyStruct){6,7,8,9,10});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("reverse\n");
     reverse(list);
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
     printf("push \n");
     push(list, &(struct MyStruct){7,8,9,10,11});
-    printMyStructArray(list);
+    forEach(list, (void *)printMyStruct);
 
-    forEach(list, printMyStruct);
-    forEach(list, doubleMyStruct); 
-    forEach(list, printMyStruct);
+    printf("double\n");
+    forEach(list, (void *)doubleMyStruct); 
+    forEach(list, (void *)printMyStruct);
 
     releaseList(list);
 

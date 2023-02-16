@@ -69,7 +69,7 @@ void top(List *list, void *element);
 void pop(List *list, uint32_t index);
 
 /**
- * Add an element at the position of the index passed.
+ * Add an element at the position of the index passed, 0-indexed.
 */
 void insert(List *list, uint32_t index, void *element);
 
@@ -80,5 +80,6 @@ void reverse(List *list);
 
 /**
  * Runs passed function for each element in list.
+ * Current implementation only modifies stored element.
 */
 void forEach(List *list, void(*f)(void *));
