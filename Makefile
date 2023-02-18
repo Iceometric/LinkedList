@@ -1,3 +1,3 @@
 all:
-	gcc main.c -o linkedlist
+	gcc -o linkedlist main.c LinkedList.c
 	./linkedlist

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "LinkedList.c"
+#include "LinkedList.h"
 
 struct MyStruct {
 

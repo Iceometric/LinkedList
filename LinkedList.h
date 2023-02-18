@@ -1,3 +1,6 @@
+#ifndef LINKED_LIST_H_
+#define LINKED_LIST_H_
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -83,3 +86,5 @@ void reverse(List *list);
  * Current implementation only modifies stored element.
 */
 void forEach(List *list, void(*f)(void *));
+
+#endif // LINKED_LIST_H_
