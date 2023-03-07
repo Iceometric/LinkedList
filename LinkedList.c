@@ -108,7 +108,7 @@ void push(List *list, void *element) {
 
 void top(List *list, void *element) {
 
-    if (index <= 0) { push(list, element); return; }
+    if (list->len <= 0) { push(list, element); return; }
 
     struct Node *current = list->start;
     while (current->next) { current = current->next; }
