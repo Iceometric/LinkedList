@@ -67,6 +67,26 @@ void resetNode(List *list, struct Node *node) {
 
 }
 
+
+struct Node *getNode(List *list, uint32_t index) {
+
+    if (index <= 0) { return NULL; }
+    if (index > list->len - 1) { return NULL; }
+
+    struct Node *current = list->start;
+    for (int i = 0; i < index; i++) { current = current->next; }
+
+    return current;
+
+}
+
+void *getElement(List *list, uint32_t index) {
+
+    struct Node *node = getNode(list, index);
+    return node->element;
+
+}
+
 void push(List *list, void *element) {
 
     struct Node *current = firstEmpty(list);
@@ -177,6 +197,36 @@ void forEach(List *list, void(*f)(void *)) {
     for (int i = 0; i < list->len; i++) {
         f(node->element);
         node = node->next;
+    }
+
+}
+
+void swap(List *list, void *a, void *b) {
+
+    char temp[list->size];
+    memcpy(temp, a, list->size);
+    memcpy(a, b, list->size);
+    memcpy(b, temp, list->size);
+
+}
+
+void sort(List *list, bool(*f)(void *, void *)) {
+    
+    if (list->len < 1) { return; }
+
+    struct Node *current = list->start;
+    struct Node *temp = list->start;
+
+    for (int i = 0; i < list->len; i++) {
+
+        current = temp;
+        for (int j = i; j <list->len; j++) {
+            if(f(temp->element, current->element)) {
+                swap(list, current->element, temp->element);
+            }
+            current = current->next;
+        }
+        temp = temp->next;
     }
 
 }

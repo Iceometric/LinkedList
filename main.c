@@ -33,11 +33,15 @@ void doubleMyStruct(struct MyStruct *m) {
 
 }
 
+bool a_sort(struct MyStruct *a, struct MyStruct *b) {
+    return a->a < b->a;
+}
+
 int main() {
 
     List *list = initList(sizeof(struct MyStruct), 100);
 
-    printf("push \n");
+    printf("push\n");
     push(list, &(struct MyStruct){1,2,3,4,5});
     forEach(list, (void *)printMyStruct);
 
@@ -49,7 +53,7 @@ int main() {
     insert(list, 1, &(struct MyStruct){3,4,5,6,7});
     forEach(list, (void *)printMyStruct);
 
-    printf("push \n");
+    printf("push\n");
     push(list, &(struct MyStruct){4,5,6,7,8});
     forEach(list, (void *)printMyStruct);
 
@@ -61,7 +65,7 @@ int main() {
     pop(list, 3);
     forEach(list, (void *)printMyStruct);
 
-    printf("push \n");
+    printf("push\n");
     push(list, &(struct MyStruct){6,7,8,9,10});
     forEach(list, (void *)printMyStruct);
 
@@ -69,13 +73,21 @@ int main() {
     reverse(list);
     forEach(list, (void *)printMyStruct);
 
-    printf("push \n");
+    printf("push\n");
     push(list, &(struct MyStruct){7,8,9,10,11});
     forEach(list, (void *)printMyStruct);
 
     printf("double\n");
     forEach(list, (void *)doubleMyStruct); 
     forEach(list, (void *)printMyStruct);
+
+    printf("sort\n");
+    sort(list, (void *)a_sort);
+    forEach(list, (void *)printMyStruct);
+
+    printf("print index 3\n");
+    printMyStruct(getElement(list, 3));
+
 
     releaseList(list);
 

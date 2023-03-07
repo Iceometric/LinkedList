@@ -57,6 +57,16 @@ struct Node *firstEmpty(List *list);
 void setElement(List *list, struct Node *node, void *src);
 
 /**
+ * Get a node at the index in list.
+*/
+struct Node *getNode(List *list, uint32_t index);
+
+/**
+ * Get an element at the index in list.
+*/
+void *getElement(List *list, uint32_t index);
+
+/**
  * Add an element as the first element of the list.
 */
 void push(List *list, void *element);
@@ -86,5 +96,16 @@ void reverse(List *list);
  * Current implementation only modifies stored element.
 */
 void forEach(List *list, void(*f)(void *));
+
+/**
+ *Used internally to swap elements.
+*/
+void swap(List *list, void *a, void *b);
+
+/**
+ * Takes a function pointer as argument to a function taking
+ * two elements and returns a boolean and sort the elements.
+*/
+void sort(List *list, bool(*f)(void *, void *));
 
 #endif // LINKED_LIST_H_
