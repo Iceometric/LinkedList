@@ -88,6 +88,9 @@ int main() {
     printf("print index 3\n");
     printMyStruct(getElement(list, 3));
 
+    printf("change index 3 and print\n");
+    setElementAtIndex(list, 3, &(struct MyStruct){7,8,9,10,11});
+    forEach(list, (void *)printMyStruct);
 
     releaseList(list);
 

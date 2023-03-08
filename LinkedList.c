@@ -87,6 +87,13 @@ void *getElement(List *list, uint32_t index) {
 
 }
 
+void setElementAtIndex(List *list, uint32_t index, void *src) {
+
+    struct Node *target = getNode(list, index);
+    setElement(list, target, src);
+
+}
+
 void push(List *list, void *element) {
 
     struct Node *current = firstEmpty(list);
@@ -214,11 +221,10 @@ void sort(List *list, bool(*f)(void *, void *)) {
     
     if (list->len < 1) { return; }
 
-    struct Node *current = list->start;
-    struct Node *temp = list->start;
+    struct Node *current, *temp;
+    temp = list->start;
 
     for (int i = 0; i < list->len; i++) {
-
         current = temp;
         for (int j = i; j <list->len; j++) {
             if(f(temp->element, current->element)) {

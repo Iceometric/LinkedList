@@ -67,6 +67,11 @@ struct Node *getNode(List *list, uint32_t index);
 void *getElement(List *list, uint32_t index);
 
 /**
+ * Set an element at the index in list.
+*/
+void setElementAtIndex(List *list, uint32_t index, void *src);
+
+/**
  * Add an element as the first element of the list.
 */
 void push(List *list, void *element);
