@@ -105,6 +105,7 @@ int main() {
     forEach(list, (void *)printMyStruct);
 
     printf("Previous len: %d, new len: %d\n", len, list->len);
+    printf("New capacity: %d\n", list->capacity);
 
     return SUCCESS;
 }

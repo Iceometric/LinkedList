@@ -10,6 +10,8 @@ How to use LinkedList
 - forEach, pass a function that operates on a single element and run for each element
 - sort, sort the list based on function pointer result
 - setElementAtIndex, update value at index
+- toArray, returns array in a static array of the lists length. Does not free memory.
+- toListFromArray, returns a pointer to a new list with elements in array, with allocated twice the space of the current len to add expandability.
 
 Internally used functions
 

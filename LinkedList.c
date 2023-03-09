@@ -253,8 +253,7 @@ void *toArray(List *list) {
 
 List *toListFromArray(void *src, uint32_t len, size_t size) {
 
-    List *list = initList(size, len);
-    struct Node *current = list->start;
+    List *list = initList(size, len * 2);
 
     for (int i = 0; i < len; i++) {
         top(list, src + (i * list->size));
