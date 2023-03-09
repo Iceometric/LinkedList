@@ -236,3 +236,30 @@ void sort(List *list, bool(*f)(void *, void *)) {
     }
 
 }
+
+void *toArray(List *list) {
+
+    char *arr = malloc(list->size * list->len);
+    struct Node *current = list->start;
+
+    for (int i = 0; i < list->len; i++) {
+        memcpy(arr + (i * list->size), current->element, list->size);
+        current = current->next;
+    }
+
+    return arr;
+
+}
+
+List *toListFromArray(void *src, uint32_t len, size_t size) {
+
+    List *list = initList(size, len);
+    struct Node *current = list->start;
+
+    for (int i = 0; i < len; i++) {
+        top(list, src + (i * list->size));
+    }
+
+    return list;
+
+}

@@ -113,4 +113,15 @@ void swap(List *list, void *a, void *b);
 */
 void sort(List *list, bool(*f)(void *, void *));
 
+/**
+ * Returns an array of stored elements.
+*/
+void *toArray(List *list);
+
+
+/**
+ * Build a list from an array of elements.
+*/
+List *toListFromArray(void *src, uint32_t len, size_t size);
+
 #endif // LINKED_LIST_H_

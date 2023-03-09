@@ -92,7 +92,19 @@ int main() {
     setElementAtIndex(list, 3, &(struct MyStruct){7,8,9,10,11});
     forEach(list, (void *)printMyStruct);
 
+    printf("toArray and print\n");
+    int len = list->len;
+    struct MyStruct *ms = toArray(list);
+    for (int i = 0; i < list->len; i++) {
+        printMyStruct(&ms[i]);
+    }
     releaseList(list);
+
+    printf("Recreate List\n");
+    list = toListFromArray(ms, len, sizeof(struct MyStruct));
+    forEach(list, (void *)printMyStruct);
+
+    printf("Previous len: %d, new len: %d\n", len, list->len);
 
     return SUCCESS;
 }
