@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include <stdbool.h>
 
 struct Node *initNodeBuffer(uint32_t capacity) {
 
@@ -254,9 +255,33 @@ void *toArray(List *list) {
 List *toListFromArray(void *src, uint32_t len, size_t size) {
 
     List *list = initList(size, len * 2);
+    list->len = len;
 
+    memcpy(list->elements, src, size * len);
+
+    size_t nodeSize = sizeof(struct Node);
+    struct Node *current;
     for (int i = 0; i < len; i++) {
-        top(list, src + (i * list->size));
+
+        current = list->start + (i * nodeSize);
+
+        if (i == 0) {
+            current->previous = NULL;
+        } else {
+            current->previous = current - nodeSize;
+        }
+
+        if (i == len - 1) {
+            current->next = NULL;
+        } else {
+            current->next = current + nodeSize;
+        }
+
+        current->active = true;
+        current->element = list->elements + (i * list->size);
+
+        current = current->next;
+        
     }
 
     return list;
