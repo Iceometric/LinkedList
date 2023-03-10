@@ -29,8 +29,8 @@ typedef struct List {
 } List;
 
 /**
- *Used internally to initiate a buffer for the nodes.
- *Index in this buffer is used to find its corresponding element.
+ * Used internally to initiate a buffer for the nodes.
+ * Index in this buffer is used to find its corresponding element.
 */
 struct Node *initNodeBuffer(uint32_t capacity);
 
@@ -114,13 +114,15 @@ void swap(List *list, void *a, void *b);
 void sort(List *list, bool(*f)(void *, void *));
 
 /**
- * Returns an array of stored elements.
+ * Returns an array of stored elements. Will not release list.
+ * Array is allocated and must be released.
 */
 void *toArray(List *list);
 
 
 /**
- * Build a list from an array of elements.
+ * Build a list from an array of elements. Will not release array.
+ * List is allocated and must be released.
 */
 List *toListFromArray(void *src, uint32_t len, size_t size);
 

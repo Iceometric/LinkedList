@@ -34,7 +34,9 @@ void doubleMyStruct(struct MyStruct *m) {
 }
 
 bool a_sort(struct MyStruct *a, struct MyStruct *b) {
+
     return a->a < b->a;
+
 }
 
 int main() {
@@ -104,9 +106,14 @@ int main() {
     list = toListFromArray(ms, len, sizeof(struct MyStruct));
     forEach(list, (void *)printMyStruct);
 
+    free(ms);
+
     printf("Previous len: %d, new len: %d\n", len, list->len);
     printf("New capacity: %d\n", list->capacity);
 
+    releaseList(list);
+
     return SUCCESS;
+
 }
 
