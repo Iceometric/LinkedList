@@ -1,5 +1,4 @@
 #include "LinkedList.h"
-#include <stdbool.h>
 
 struct Node *initNodeBuffer(uint32_t capacity) {
 
