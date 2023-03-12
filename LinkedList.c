@@ -227,7 +227,7 @@ void sort(List *list, bool(*f)(void *, void *)) {
     for (int i = 0; i < list->len; i++) {
         current = temp;
         for (int j = i; j < list->len; j++) {
-            if(f(temp->element, current->element)) {
+            if(f(current->element, temp->element)) {
                 swap(list, current->element, temp->element);
             }
             current = current->next;
